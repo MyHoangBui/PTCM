@@ -54,6 +54,7 @@ Tên đề tài: Quản lý bến xe khách.
   3. Client:
     - Thông báo với hệ thống về việc dừng đổ, tình trạng xe và lịch trình.
     - Tiếp nhận thông tin điều khiển.
+    - Thông báo số lượng khách trên xe. Khách lên xuống xe.
   4. Mô hình hoạt động:
   
     Data                Server                                                        ________________________
