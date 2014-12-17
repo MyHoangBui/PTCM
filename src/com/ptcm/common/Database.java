@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import com.ptcm.model.Driver;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
 
@@ -220,9 +221,61 @@ public class Database {
 		return null;
 		
 	}
+	/**
+	 * 
+	 * @param obj
+	 * @param fields
+	 * @return
+	 */
 	
+	public ArrayList<ArrayList<String>> searchObject(Object obj,String fields[]){
+		
+		ArrayList<ArrayList<String>>resultData = new ArrayList<>();
+		try {
+			Object data[];
+			String field[];
+			int index[] = new int[fields.length];
+			field = this.getField(obj);
+			int numfield = 0;
+			for (int i = 0; i < fields.length; i++) {
+				for (int j = 0; j < field.length; j++) {
+					if(fields[i].equalsIgnoreCase(field[j])){
+						index[numfield] = j;
+						numfield++;
+						break;
+					}
+				}
+			}
+			if(numfield == fields.length){
+				data = this.getValue(obj);
+				String tableName = this.getTableName(this.getObjectClass(obj).toString());
+				
+				String sql = "SELECT * FROM "+PREFIX+tableName+" WHERE ";
+				for (int i = 0; i < index.length; i++) {
+					sql += fields[i]+"='"+data[index[i]];
+				}
+				Statement stt = this.connection.createStatement();
+				ResultSet result = stt.executeQuery(sql);
+				ResultSetMetaData meta = result.getMetaData();
+				while(result.next()){
+					ArrayList<String>row = new ArrayList<>();
+					for (int i = 0; i < meta.getColumnCount(); i++) {
+						row.add(result.getString(i+1));
+					}
+					resultData.add(row);
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return resultData;
+	}
 	
-	private String[] getField(Object obj){
+	public String[] getField(Object obj){
 		Class<?> cls = obj.getClass();
 		Field fields[] = cls.getDeclaredFields();
 		Field supperFields[] = cls.getSuperclass().getDeclaredFields();
@@ -265,7 +318,7 @@ public class Database {
 		
 	}
 	
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 		
 		
 		Database db = new Database("localhost", "1433", "PTCM", "sa", "1234");
@@ -280,7 +333,7 @@ public class Database {
 		}
 		
 	}
-	
+*/	
 	
 	private String dateFormat(Date date){
 		
