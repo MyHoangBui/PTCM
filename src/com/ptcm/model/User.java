@@ -4,8 +4,11 @@ public class User {
 	
 	private int id;
 	private String username,password;
+	
+	
+	
 	public User(int id, String username, String password) {
-		super();
+		
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -29,6 +32,6 @@ public class User {
 		this.password = password;
 	}
 	
-
+	
 	
 }
