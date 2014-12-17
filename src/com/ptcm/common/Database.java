@@ -8,17 +8,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
-import java.util.logging.SimpleFormatter;
 
 import com.ptcm.model.Driver;
 
@@ -179,6 +172,55 @@ public class Database {
 		
 		return 0;
 	}
+	/**
+	 * search anything in Object give with contains String text
+	 * @param text text for search
+	 * @param obj Object to search
+	 * @return ArrayList<ArrayList<String>>
+	 */
+	
+	public ArrayList<ArrayList<String>> searchObject(String text,Object obj){
+		
+		String tableName = this.getTableName(this.getObjectClass(obj).toString());
+		
+		String sql = "SELECT * FROM "+PREFIX+tableName+" WHERE ";
+		String fields[] = this.getField(obj);
+		
+		for (int i = 0; i < fields.length; i++) {
+			sql += fields[i] + "like %"+text+"%";
+			if(i != fields.length -1 )
+				sql += " OR ";
+		}
+		ArrayList<ArrayList<String>>data = new ArrayList<>();
+		try {
+			Statement stt = this.connection.createStatement();
+			stt.executeQuery(sql);
+			ResultSet result = stt.getResultSet();
+			ResultSetMetaData metadata = result.getMetaData();
+			
+			ArrayList<String> header = new ArrayList<>();
+			for (int i = 0; i < metadata.getColumnCount(); i++) {
+				header.add(metadata.getColumnName(i+1));
+			}
+			data.add(header);
+			while(result.next()){
+				ArrayList<String>row = new ArrayList<>();
+				for (int i = 0; i < metadata.getColumnCount(); i++) {
+					row.add(result.getString(i+1));
+				}
+				data.add(row);
+			}
+			
+			return data;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
+	
 	
 	private String[] getField(Object obj){
 		Class<?> cls = obj.getClass();
