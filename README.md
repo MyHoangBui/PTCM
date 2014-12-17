@@ -21,7 +21,7 @@ Tên đề tài: Quản lý bến xe khách.
   - Lập bảng phân công các chuyến xe.
   - Tiếp nhận các yêu cầu của các chuyến xe.
   - Xử lý thông tin giữa các trạm kết nối với nhau.
-  - Thông báo cho các trạm và các xe thời gian ra vào bến và các trạm dừng.
+  - Phân phối lịch trình của các xe.
   - Xem thông tin của các trạm dừng.
   - ...
 - Yêu cầu phi chức năng:
@@ -39,5 +39,43 @@ Tên đề tài: Quản lý bến xe khách.
   5. Gói tin: Là gói dữ liệu của hệ thống liên lạc với nhau. Có hai loại gói tin là gói tin dữ liệu và gói tin điều khiển.
   6. Bộ kết nối: Là bộ phận xử lý kiểm tra tín hiệu kết nối tới trung tâm hay các máy trạm và client.
   7. 
+====
+4. Hoạt động hệ thống
+====
+  1. Máy chủ:
+    - Lập lịch trình cho từng chuyến xe.
+    - Phân phối lịch trình cho các xe.
+    - Ra lệnh vào ra trạm cho các xe.
+    - Trả lời truy vấn thông tin khi có truy vấn.
+  2. Máy trạm:
+    - Truy vấn thông tin lịch trình của các xe.
+    - Thông báo vào ra trạm.
+    - Quản lý hành khách vào ra các trạm.
+  3. Client:
+    - Thông báo với hệ thống về việc dừng đổ, tình trạng xe và lịch trình.
+    - Tiếp nhận thông tin điều khiển.
+    - Thông báo số lượng khách trên xe. Khách lên xuống xe.
+  4. Mô hình hoạt động:
   
+    Data                Server                                                        ________________________
+    [--]                |-----|                                                       |__|__|__|__|__|__|__|__|
+    [--]<-------------->|-----|---------------|               |-----------------------|___@______________@____|
+    [--]                |-----|               |               |
+                                              |               |                               Client
+                          ( --------^-----^---|-------^-------^-----)
+                        (         INTERNET                            )
+                          (                                             )
+                            (                                         )
+                              (                                     )
+                                (_________________________________)
+                                    |                         |
+            |---|                   |                         |                       ________________________
+      ____  |---|                   |                         |                       |__|__|__|__|__|__|__|__|
+      |__|__|---|___________________|                         |_______________________|___@______________@____|
+        |
+      =====
+        Host                                                                                Client
 
+===
+5. Hệ thống liên lạc với nhau:
+===
