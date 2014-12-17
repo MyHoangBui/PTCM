@@ -141,7 +141,36 @@ public class Database {
 	
 	
 	public int updateObject(Object obj){
+		String tableName = this.getTableName(this.getObjectClass(obj).toString());
 		
+		String fields[] = this.getField(obj);
+		
+		try {
+			Object values[] = this.getValue(obj);
+			String sql = "UPDATE "+PREFIX+tableName+ " SET ";
+			
+			for (int i = 1; i < values.length; i++) {
+				sql += fields[i]+"=";
+				if(values[i] instanceof Date ){
+					sql += "'"+this.dateFormat((Date)values[i])+"'";
+				}else{
+					sql += "'"+values[i]+"'";
+				}
+				if(i != values.length -1){
+					sql += ",";
+				}
+			}
+			sql += " WHERE "+fields[0]+"='"+values[0]+"'";
+			Statement stt = this.connection.createStatement();
+			System.out.println(sql);
+			int result = stt.executeUpdate(sql);
+			
+			return result;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		
@@ -198,8 +227,9 @@ public class Database {
 		
 		
 		Database db = new Database("localhost", "1433", "PTCM", "sa", "1234");
-		Driver dr = new Driver(2, "haha", "sdasdas", "132131", new Date(), "");
+		Driver dr = new Driver(1, "haha", "sdasdas", "1", new Date(), "");
 		db.insertObject(dr);
+		db.updateObject(dr);
 		ArrayList<ArrayList<String>> data = db.getObject(dr, 1);
 		for (int i = 0; i < data.size(); i++) {
 			for (int j = 0; j < data.get(i).size(); j++) {
