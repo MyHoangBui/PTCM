@@ -1,6 +1,8 @@
 package com.ptcm.controller;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.ptcm.common.Config;
 import com.ptcm.resource.LanguageResource;
@@ -13,13 +15,18 @@ public class MainThread {
 		Config config = new Config();
 		LanguageResource lang  = new LanguageResource("EN");
 		config.setLang(lang);
+		
 		LoginGui gui = new LoginGui(config);
 		
 		Runnable mainGui = new MainGui(config);
 		
 		try {
 			//SwingUtilities.invokeAndWait(mainGui);
-			SwingUtilities.invokeLater(new LoginGui(config));
+			LoginGui loginGui = new LoginGui(config);
+			SwingUtilities.invokeLater(loginGui);
+							
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
