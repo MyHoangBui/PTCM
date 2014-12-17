@@ -4,11 +4,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.logging.SimpleFormatter;
 
 import com.ptcm.model.Driver;
 
@@ -46,33 +56,99 @@ public class Database {
 		
 	}
 	
-	public int insertObject(Object obj) throws Exception{
+	public int insertObject(Object obj) {
 		String table = this.getTableName(this.getObjectClass(obj).toString());
-		String sql = "INSERT INTO "+PREFIX+table+" values(";
-		Object value[] = this.getValue(obj);
-		for (int i = 0; i < value.length; i++) {
-			if(value[i] instanceof Date){
-				Date date = (Date)value[i];
-				
-				String values = DateFormat.getInstance().format(date);
-				sql += "'"+values+"'";
-			}else{
-				sql += "'"+value[i]+"'";
-			}
-			//sql += "'"+value[i]+"'";
-			if(i != value.length -1)
+		
+		String sql = "INSERT INTO "+PREFIX+table+"(";
+		String fieldName[] = this.getField(obj);
+		
+		for (int i = 0; i < fieldName.length; i++) {
+			sql += fieldName[i];
+			if(i != fieldName.length -1)
 				sql += ",";
+		}
+		sql += ") values(";
+		int result = -1;
+		try {
+			Object value[] = this.getValue(obj);
+			for (int i = 0; i < value.length; i++) {
+				if(value[i] instanceof Date){
+					Date date = (Date)value[i];
+					
+					String values = this.dateFormat(date);
+					sql += "'"+values+"'";
+				}else{
+					sql += "'"+value[i]+"'";
+				}
+				
+				if(i != value.length -1)
+					sql += ",";
+			}
+			
+			
+			
+			sql += ")";
+			System.out.println(sql);
+			Statement stt = this.connection.createStatement();
+			result = stt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+		
+	}
+	
+	public ArrayList<ArrayList<String>> getObject(Object obj,int page){
+		
+		String tableName = this.getTableName(this.getObjectClass(obj).toString());
+		ArrayList<ArrayList<String>> data = new ArrayList<>();
+		try {
+			String sql = "SELECT TOP "+(page*30)+"* FROM "+PREFIX+tableName;
+			Statement stt = this.connection.createStatement();
+			stt.execute(sql);
+			ResultSet result = stt.getResultSet();
+			ResultSetMetaData metadata = result.getMetaData();
+			ArrayList<String> row = new ArrayList<>();
+			int colsize = metadata.getColumnCount();
+			for (int i = 0; i < colsize; i++) {
+				row.add(metadata.getColumnName(i+1));
+			}
+			data.add(row);
+			
+			while(result.next()){
+				ArrayList<String> rows = new ArrayList<>();
+				for (int i = 0; i < colsize; i++) {
+					rows.add(result.getString(i+1));
+				}
+				data.add(rows);
+			}
+			
+			return data;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
+		return null;
+	}
+	
+	
+	public int updateObject(Object obj){
 		
-		sql += ")";
-		System.out.println(sql);
-		Statement stt = this.connection.createStatement();
 		
 		
-		return stt.executeUpdate(sql);
 		
+		
+		
+		
+		return 0;
 	}
 	
 	private String[] getField(Object obj){
@@ -118,14 +194,27 @@ public class Database {
 		
 	}
 	
-	/*public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		
 		
 		Database db = new Database("localhost", "1433", "PTCM", "sa", "1234");
-		Driver dr = new Driver(1, "hieu", "sss", "222", new Date(), "sss");
+		Driver dr = new Driver(2, "haha", "sdasdas", "132131", new Date(), "");
 		db.insertObject(dr);
+		ArrayList<ArrayList<String>> data = db.getObject(dr, 1);
+		for (int i = 0; i < data.size(); i++) {
+			for (int j = 0; j < data.get(i).size(); j++) {
+				System.out.println(data.get(i).get(j));
+			}
+		}
 		
-	}*/
+	}
+	
+	
+	private String dateFormat(Date date){
+		
+		SimpleDateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dfm.format(date);
+	}
 	
 	
 }

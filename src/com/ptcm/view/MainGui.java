@@ -41,8 +41,11 @@ public class MainGui extends JFrame{
 	public MainGui() {
 		// TODO Auto-generated constructor stub
 		setTitle("Passenger Terminal Car manager");
-		
+		/**
+		 * @lang is language to use all system;
+		 */
 		lang = new LanguageResource("EN");
+		
 		createMainTabPane();
 		setMinimumSize(new Dimension(600,400));
 		pack();
