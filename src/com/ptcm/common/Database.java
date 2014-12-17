@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -48,8 +50,16 @@ public class Database {
 		String table = this.getTableName(this.getObjectClass(obj).toString());
 		String sql = "INSERT INTO "+PREFIX+table+" values(";
 		Object value[] = this.getValue(obj);
-		for (int i = 0; i < value.length; i++) {	
-			sql += "'"+value[i]+"'";
+		for (int i = 0; i < value.length; i++) {
+			if(value[i] instanceof Date){
+				Date date = (Date)value[i];
+				
+				String values = DateFormat.getInstance().format(date);
+				sql += "'"+values+"'";
+			}else{
+				sql += "'"+value[i]+"'";
+			}
+			//sql += "'"+value[i]+"'";
 			if(i != value.length -1)
 				sql += ",";
 		}
@@ -108,14 +118,14 @@ public class Database {
 		
 	}
 	
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 		
 		
 		Database db = new Database("localhost", "1433", "PTCM", "sa", "1234");
 		Driver dr = new Driver(1, "hieu", "sss", "222", new Date(), "sss");
 		db.insertObject(dr);
 		
-	}
+	}*/
 	
 	
 }
