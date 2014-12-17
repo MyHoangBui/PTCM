@@ -1,24 +1,16 @@
 package com.ptcm.view;
 
-<<<<<<< HEAD
-import java.awt.Dimension;
-
-=======
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.Box;
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-<<<<<<< HEAD
-=======
 import javax.swing.JMenuItem;
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -38,42 +30,22 @@ public class MainGui extends JFrame{
 	
 	private JMenuBar menuBar;
 	private JMenu menuFile,menuEdit,menuHelp;
-<<<<<<< HEAD
-	private JTabbedPane mainTabpane,managermentTabpane;
-	private JPanel jpnTabManagermentStation,jpnTabManagermentCar,jpnTabManagermentDriver,jpnTabManagermentOwner,jpnTabSchedule,jpnTabNotify;
-	private JTextField searchTextbox;
-	private JButton btnEditStation,btnAddStation,btnDeleteStation,btnNotify,btnGenerateSchedule;
-=======
 	private JMenuItem mnitemNew, mnitemOpen, mnitemSave, mnitemopy, mnitemPast, mnitemDelete, mnitemIndex, mnitemFind;
 	private JTabbedPane mainTabpane,managermentTabpane;
 	private JPanel jpnTabManagermentStation,jpnTabManagermentCar,jpnTabManagermentDriver,jpnTabManagermentOwner,jpnTabSchedule,jpnTabNotify;
 	private JTextField searchTextbox;
 	private JButton btnEditStation,btnAddStation,btnDeleteStation,btnNotify,btnGenerateSchedule, btnSearch, btnBus;
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	private JCheckBox cbSelectAll;
 	private JTable tblStation;
 	private JComboBox<String>cbbBus;
 	private TableModel mdStationTable,mdCarTable,mdDriverTable,mdOwnerTable,mdScheduleTable,mdNotifyTable;
 	
-<<<<<<< HEAD
-=======
 	
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	private LanguageResource lang;
 	
 	public MainGui() {
 		// TODO Auto-generated constructor stub
 		setTitle("Passenger Terminal Car manager");
-<<<<<<< HEAD
-		/**
-		 * @lang is language to use all system;
-		 */
-		lang = new LanguageResource("EN");
-		
-		createMainTabPane();
-		setMinimumSize(new Dimension(600,400));
-		pack();
-=======
 		
 		lang = new LanguageResource("EN");
 		createMainTabPane();
@@ -94,46 +66,24 @@ public class MainGui extends JFrame{
 		
 		pack();
 		
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	}
 
 
 	private void createMainTabPane() {
 		JScrollPane jspPane = new JScrollPane(mainTabpane = new JTabbedPane(JTabbedPane.LEFT));
 		mainTabpane.setMinimumSize(new Dimension(600, 400));
-<<<<<<< HEAD
-=======
 		
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB), managermentTabpane = new JTabbedPane(JTabbedPane.TOP));
 		
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_STATION), jpnTabManagermentStation = new JPanel());
 		
-<<<<<<< HEAD
-=======
 		createTabStation();
 		
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 		
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_CAR), jpnTabManagermentCar = new JPanel());
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_DRIVER), jpnTabManagermentDriver = new JPanel());
 		
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_SCHEDULE_TAB), jpnTabSchedule = new JPanel());
-<<<<<<< HEAD
-		
-		
-		
-		mainTabpane.addTab(lang.getLanguage(Language.MAIN_NOTIFY_TAB), jpnTabNotify = new JPanel());
-		
-		
-		managermentTabpane.addTab("Station", new JPanel());
-		
-		
-		add(jspPane);
-	}
-	
-	
-=======
 		createSchedule();
 		
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_NOTIFY_TAB), jpnTabNotify = new JPanel());
@@ -200,13 +150,8 @@ public class MainGui extends JFrame{
 	b.add(b2);
 	jpnTabSchedule.add(b);
 	}
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	public static void main(String[] args) {
 		new MainGui().setVisible(true);
 	}
 	
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
