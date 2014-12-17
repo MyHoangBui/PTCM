@@ -68,10 +68,4 @@ public class Driver extends Persion{
 		this.license = license;
 	}
 	
-	
-	
-	
-	
-	
-	
 }
