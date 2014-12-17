@@ -50,6 +50,11 @@ public class Database {
 		
 	}
 	
+	/**
+	 * Insert data into table instance of Object class name
+	 * @param obj Object to insert database
+	 * @return numrows effected!
+	 */
 	public int insertObject(Object obj) {
 		String table = this.getTableName(this.getObjectClass(obj).toString());
 		
@@ -97,6 +102,12 @@ public class Database {
 		
 	}
 	
+	/**
+	 * Get data from database with Object give
+	 * @param obj Object give choose table
+	 * @param page number of page to show
+	 * @return ArrayList<ArrayList<String>>
+	 */
 	public ArrayList<ArrayList<String>> getObject(Object obj,int page){
 		
 		String tableName = this.getTableName(this.getObjectClass(obj).toString());
@@ -133,7 +144,11 @@ public class Database {
 		return null;
 	}
 	
-	
+	/**
+	 * Update Object give
+	 * @param obj 
+	 * @return
+	 */
 	public int updateObject(Object obj){
 		String tableName = this.getTableName(this.getObjectClass(obj).toString());
 		
@@ -252,7 +267,9 @@ public class Database {
 				
 				String sql = "SELECT * FROM "+PREFIX+tableName+" WHERE ";
 				for (int i = 0; i < index.length; i++) {
-					sql += fields[i]+"='"+data[index[i]];
+					sql += fields[i]+"='"+data[index[i]]+"'";
+					if(i != index.length -1)
+						sql += " AND ";
 				}
 				Statement stt = this.connection.createStatement();
 				ResultSet result = stt.executeQuery(sql);

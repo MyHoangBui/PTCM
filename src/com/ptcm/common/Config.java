@@ -1,10 +1,12 @@
 package com.ptcm.common;
 
+import com.ptcm.model.User;
 import com.ptcm.resource.LanguageResource;
 
 public class Config {
 	private Database db;
 	private LanguageResource lang;
+	private User user;
 	
 	
 	
@@ -36,6 +38,14 @@ public class Config {
 	}
 	public void setLang(LanguageResource lang) {
 		this.lang = lang;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	
