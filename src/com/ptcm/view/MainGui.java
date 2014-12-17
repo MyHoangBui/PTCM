@@ -2,8 +2,11 @@ package com.ptcm.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -16,18 +19,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import sun.awt.DefaultMouseInfoPeer;
+
+import com.ptcm.common.Config;
+import com.ptcm.model.Station;
 import com.ptcm.resource.Language;
 import com.ptcm.resource.LanguageResource;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
 
-public class MainGui extends JFrame{
+public class MainGui extends JFrame implements Runnable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private JMenuBar menuBar;
 	private JMenu menuFile,menuEdit,menuHelp;
 	private JMenuItem mnitemNew, mnitemOpen, mnitemSave, mnitemopy, mnitemPast, mnitemDelete, mnitemIndex, mnitemFind;
@@ -39,15 +52,19 @@ public class MainGui extends JFrame{
 	private JTable tblStation;
 	private JComboBox<String>cbbBus;
 	private TableModel mdStationTable,mdCarTable,mdDriverTable,mdOwnerTable,mdScheduleTable,mdNotifyTable;
-	
-	
+
+
 	private LanguageResource lang;
-	
-	public MainGui() {
+	private Config config;
+
+	public MainGui(Config config) {
+
 		// TODO Auto-generated constructor stub
+		this.config = config;
 		setTitle("Passenger Terminal Car manager");
-		
-		lang = new LanguageResource("EN");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		lang = this.config.getLang();
 		createMainTabPane();
 		setMinimumSize(new Dimension(600,400));
 		setJMenuBar(menuBar = new JMenuBar());
@@ -59,56 +76,58 @@ public class MainGui extends JFrame{
 		menuEdit.add(mnitemopy = new JMenuItem("Copy"));
 		menuEdit.add(mnitemPast = new JMenuItem("Past"));
 		menuEdit.add(mnitemDelete = new JMenuItem("Delete"));
-		
+
 		menuBar.add(menuHelp = new JMenu("Help"));
 		menuHelp.add(mnitemIndex = new JMenuItem("Index"));
 		menuHelp.add(mnitemFind = new JMenuItem("Find"));
-		
+
 		pack();
-		
+
 	}
 
 
 	private void createMainTabPane() {
 		JScrollPane jspPane = new JScrollPane(mainTabpane = new JTabbedPane(JTabbedPane.LEFT));
 		mainTabpane.setMinimumSize(new Dimension(600, 400));
-		
+
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB), managermentTabpane = new JTabbedPane(JTabbedPane.TOP));
-		
+
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_STATION), jpnTabManagermentStation = new JPanel());
-		
+
 		createTabStation();
-		
-		
+
+
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_CAR), jpnTabManagermentCar = new JPanel());
 		managermentTabpane.addTab(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_DRIVER), jpnTabManagermentDriver = new JPanel());
-		
+
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_SCHEDULE_TAB), jpnTabSchedule = new JPanel());
 		createSchedule();
-		
+
 		mainTabpane.addTab(lang.getLanguage(Language.MAIN_NOTIFY_TAB), jpnTabNotify = new JPanel());
 		Box b = Box.createVerticalBox();
 		JPanel b1 = new JPanel();
 		JPanel b2 = new JPanel();
-		
+
 		JPanel jpbtnotify = new JPanel();
 		jpbtnotify.add(btnBus = new JButton(lang.getLanguage(Language.MAIN_NOTIFY_TAB_BT_BUS)));
 		jpbtnotify.add(cbbBus = new JComboBox<String>());
 		b1.add(jpbtnotify);
 		JScrollPane jscPtable = new JScrollPane(tblStation = new JTable());
 		b2.add(jscPtable);
-		
+
 		b.add(b1);
 		b.add(b2);
 		jpnTabNotify.add(b);
 		managermentTabpane.addTab("Station", new JPanel());
-		
+
 		add(jspPane);
 	}
 
 
 	private void createTabStation() {
-		Box b = Box.createVerticalBox();
+		JPanel p = new JPanel();
+		BoxLayout bl = new BoxLayout(p, BoxLayout.Y_AXIS);
+		p.setLayout(bl);
 		JPanel b1 = new JPanel();
 		JPanel b2 = new JPanel();
 		JPanel jpnbution = new JPanel();
@@ -119,39 +138,70 @@ public class MainGui extends JFrame{
 		jpnbution.add(searchTextbox = new JTextField(15));
 		jpnbution.add(btnSearch = new JButton(lang.getLanguage(Language.MAIN_MANAGERMENT_TAB_STATION_BTN_SEARCH)));
 		b1.add(jpnbution);
-		
+
 		JScrollPane jscPtable = new JScrollPane(tblStation = new JTable());
+		ArrayList<ArrayList<String>>data = this.config.getDb().getObject(new Station(0,0,0,""), 1);
 		
+		DefaultTableModel tblmd = new DefaultTableModel(data.get(0).toArray(),0);
+		tblStation.setModel(tblmd);
 		b2.add(jscPtable);
+
 		
-		b.add(b1);
-		b.add(b2);
-		jpnTabManagermentStation.add(b);
+		//jpnTabManagermentStation.setLayout(new BoxLayout(jpnTabManagermentStation, BoxLayout.Y_AXIS));
+		p.add(b1);
+		p.add(b2);
+		JPanel p1 = new JPanel();
+		p1.add(p);
+		jpnTabManagermentStation.add(p1);
+		
+		//jpnTabManagermentStation.add(b);
 	}
-	
+
 	private void createSchedule()
 	{
-	Box b = Box.createVerticalBox();
-	JPanel b1 = new JPanel();
-	JPanel b2 = new JPanel();
-	
-	JPanel jpBut = new JPanel();
-	jpBut.add(btnNotify = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_NOTIFY)));
-	jpBut.add(btnGenerateSchedule = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_GENERRATESSCHEDULE)));
-	jpBut.add(cbbBus = new JComboBox<String>());
-	jpBut.add(searchTextbox = new JTextField(15));
-	jpBut.add(btnSearch = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_SEARCH)));
-	b1.add(jpBut);
-	
-	JScrollPane jscPtable = new JScrollPane(tblStation = new JTable());
-	b2.add(jscPtable);
-	
-	b.add(b1);
-	b.add(b2);
-	jpnTabSchedule.add(b);
+		Box b = Box.createVerticalBox();
+		JPanel b1 = new JPanel();
+		JPanel b2 = new JPanel();
+
+		JPanel jpBut = new JPanel();
+		jpBut.add(btnNotify = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_NOTIFY)));
+		jpBut.add(btnGenerateSchedule = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_GENERRATESSCHEDULE)));
+		jpBut.add(cbbBus = new JComboBox<String>());
+		jpBut.add(searchTextbox = new JTextField(15));
+		jpBut.add(btnSearch = new JButton(lang.getLanguage(Language.MAIN_SCHEDULE_TAB_BTN_SEARCH)));
+		b1.add(jpBut);
+
+		JScrollPane jscPtable = new JScrollPane(tblStation = new JTable());
+		b2.add(jscPtable);
+
+		b.add(b1);
+		b.add(b2);
+		jpnTabSchedule.add(b);
 	}
-	public static void main(String[] args) {
-		new MainGui().setVisible(true);
+
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			LookAndFeelInfo look[] = UIManager.getInstalledLookAndFeels();
+			for (LookAndFeelInfo lookAndFeelInfo : look) {
+
+				System.out.println(lookAndFeelInfo.getClassName());
+			}
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new MainGui(this.config).setVisible(true);
 	}
-	
+
+
+	/*public static void main(String[] args) {
+
+	}*/
+
 }
