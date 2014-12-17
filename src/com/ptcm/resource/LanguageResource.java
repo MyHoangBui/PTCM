@@ -13,6 +13,10 @@ public class LanguageResource implements Language{
 	
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_ADDSTATION = "New Station";
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_DELETE 	= "Delete";
+<<<<<<< HEAD
+=======
+	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_SEARCH		= "Search";
+>>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	
 	public String EN_MAIN_MANAGERMENT_TAB_CAR 					= "Car";
 	public String EN_MAIN_MANAGERMENT_TAB_DRIVER 				= "Driver";
@@ -20,7 +24,19 @@ public class LanguageResource implements Language{
 	
 	
 	public String EN_MAIN_SCHEDULE_TAB 							= "Schedule";
+<<<<<<< HEAD
 	public String EN_MAIN_NOTIFY_TAB 							= "Notify";
+=======
+	public String EN_MAIN_SCHEDULE_TAB_BTN_NOTIFY 					= "Notify";
+	public String EN_MAIN_SCHEDULE_TAB_BTN_GENERRATESSCHEDULE 		= "Generate Schedule";
+	public String EN_MAIN_SCHEDULE_TAB_CB_BUS 						= "Bus";
+	public String EN_MAIN_SCHEDULE_TAB_BTN_SEARCH					= "Search";
+	
+	public String EN_MAIN_NOTIFY_TAB 							= "Notify";
+	public String EN_MAIN_NOTIFY_TAB_BT_BUS 					= "Bus";
+	
+	public String EN_MAIN_BTN_SEARCH							= "Search";
+>>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
 	
 
 	
@@ -92,4 +108,8 @@ public class LanguageResource implements Language{
 	
 	
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6780817cba31be00959f852a705aed9de4fd25fa
