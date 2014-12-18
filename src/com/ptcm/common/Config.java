@@ -7,7 +7,7 @@ public class Config {
 	private Database db;
 	private LanguageResource lang;
 	private User user;
-	
+	private String lookAndFeel;
 	
 	
 	public Config(Database db, LanguageResource lang) {
@@ -46,6 +46,14 @@ public class Config {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getLookAndFeel() {
+		return lookAndFeel;
+	}
+
+	public void setLookAndFeel(String lookAndFeel) {
+		this.lookAndFeel = lookAndFeel;
 	}
 	
 	
