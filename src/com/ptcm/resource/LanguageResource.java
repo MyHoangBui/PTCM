@@ -10,6 +10,10 @@ public class LanguageResource implements Language{
 	public String EN_MAIN_MANAGERMENT_TAB_STATION 				= "Station";
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_CB_SELECTALL 	= "Select all";
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_EDIT 		= "Edit";
+
+	public String EN_MAIN_MANAGERMENT_TAB_STATION_ADDFRAME_TITLE= "New station";
+	
+	
 	
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_ADDSTATION = "New Station";
 	public String EN_MAIN_MANAGERMENT_TAB_STATION_BTN_DELETE 	= "Delete";
