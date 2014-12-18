@@ -127,6 +127,7 @@ public class MainGui extends JFrame implements Runnable{
 	private void createTabStation() {
 		JPanel p = new JPanel();
 		BoxLayout bl = new BoxLayout(p, BoxLayout.Y_AXIS);
+		BorderLayout bdl = new BorderLayout();
 		p.setLayout(bl);
 		JPanel b1 = new JPanel();
 		JPanel b2 = new JPanel();
@@ -152,7 +153,9 @@ public class MainGui extends JFrame implements Runnable{
 		p.add(b2);
 		JPanel p1 = new JPanel();
 		p1.add(p);
-		jpnTabManagermentStation.add(p1);
+		jpnTabManagermentStation.setLayout(bdl);
+		jpnTabManagermentStation.add(b1,BorderLayout.NORTH);
+		jpnTabManagermentStation.add(jscPtable);
 		
 		//jpnTabManagermentStation.add(b);
 	}
@@ -190,13 +193,13 @@ public class MainGui extends JFrame implements Runnable{
 
 				System.out.println(lookAndFeelInfo.getClassName());
 			}
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(this.config.getLookAndFeel());
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		new MainGui(this.config).setVisible(true);
+		setVisible(true);
 	}
 
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javafx.scene.layout.GridPane;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -17,7 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
 
 import com.ptcm.common.Config;
 import com.ptcm.model.User;
@@ -51,8 +54,17 @@ public class LoginGui extends JFrame implements Runnable,ActionListener{
 		p.add(new JLabel("Password: "));
 		p.add(jtfPassword = new JTextField(20));
 
-		add(p);
-		add(btnLogin = new JButton("Login"),BorderLayout.SOUTH);
+		//add(p);
+		JPanel pn = new JPanel();
+		pn.add(btnLogin = new JButton("Login"));
+		//add(pn,BorderLayout.SOUTH);
+		JPanel mainPanel = new JPanel();
+		BoxLayout bl = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
+		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		mainPanel.setLayout(bl);
+		mainPanel.add(p);
+		mainPanel.add(pn);
+		add(mainPanel);
 		btnLogin.addActionListener(this);
 		pack();
 	}
@@ -76,13 +88,14 @@ public class LoginGui extends JFrame implements Runnable,ActionListener{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			UIManager.setLookAndFeel(this.config.getLookAndFeel());
+			
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		new LoginGui(this.config).setVisible(true);
+		setVisible(true);
 	}
 
 
@@ -115,7 +128,14 @@ public class LoginGui extends JFrame implements Runnable,ActionListener{
 				
 		}
 	}
-
+	public String[] getTheme(){
+		LookAndFeelInfo info[] = UIManager.getInstalledLookAndFeels();
+		String themes[] = new String[info.length];
+		for (int i = 0; i < themes.length; i++) {
+			themes[i] = info[i].getClassName();
+		}
+		return themes;
+	}
 
 
 }
